@@ -51,7 +51,6 @@ MESH LOADING FUNCTION
 
 bool load_mesh(const char* file_name) {
 	const aiScene* scene = aiImportFile(file_name, aiProcess_Triangulate); // TRIANGLES!
-	fprintf(stderr, "ERROR: reading mesh %s\n", file_name);
 	if (!scene) {
 		fprintf(stderr, "ERROR: reading mesh %s\n", file_name);
 		return false;
@@ -268,7 +267,7 @@ void display() {
 	mat4 persp_proj = perspective(45.0, (float)width / (float)height, 0.1, 100.0);
 	mat4 model = identity_mat4();
 	model = rotate_z_deg(model, rotate_y);
-	view = view = look_at(vec3(20.0f, 20.0f, 20.0f), vec3(0.0f, 0.0f, 0.0f), vec3(-20.0f, 20.0f, -20.0f));
+	view = view = look_at(vec3(20.0f, 20.0f, 20.0f), vec3(0.0f, 0.0f, 0.0f), vec3(-20.0f, -20.0f, 20.0f));
 
 	// update uniforms & draw
 	glUniformMatrix4fv(proj_mat_location, 1, GL_FALSE, persp_proj.m);

@@ -41,6 +41,10 @@
     <None Include="Debug\turbosquid_environment.mb" />
     <None Include="Debug\untitled7.dae" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Shaders\simpleFragmentShader.txt" />
+    <Text Include="Shaders\simpleVertexShader.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F0FB3319-578D-4F87-A394-7BB598F81796}</ProjectGuid>
     <RootNamespace>CGLab1</RootNamespace>
