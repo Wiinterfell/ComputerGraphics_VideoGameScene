@@ -1,5 +1,7 @@
 # 3D Scene rendering for a video game
 
+Demo : https://youtu.be/l_pFJP_7sOM
+
 ## Description
 
 In this project, I load a scene using [Assimp](http://www.assimp.org/). I also add characters (deers) and a personal model I created, using [Blender](https://www.blender.org/).
