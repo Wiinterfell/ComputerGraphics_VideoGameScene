@@ -30,7 +30,7 @@ MESH TO LOAD
 // put the mesh in your project directory, or provide a filepath for it here
 #define MESH_NAME "cartoon.3ds"
 #define MESH_NAME_2 "deer-3ds.3ds"
-#define MESH_NAME_3 "monkeyhead.dae"
+#define MESH_NAME_3 "cat.3ds"
 /*----------------------------------------------------------------------------
 ----------------------------------------------------------------------------*/
 
@@ -320,7 +320,7 @@ void display() {
 
 	//fourth object
 	mat4 model5 = identity_mat4();
-	model5 = translate(model5, vec3(15.0, 9.0, 15.0));
+	model5 = translate(model5, vec3(-15.0, 9.0, 0.0));
 	// global of the child is got by pre-multiplying the local of the child by the global of the parent
 	// update uniform & draw
 	glUniformMatrix4fv(matrix_location, 1, GL_FALSE, model5.m);
