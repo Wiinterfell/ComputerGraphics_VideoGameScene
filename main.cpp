@@ -19,6 +19,9 @@
 float xTranslation = 0.0f;
 float yTranslation = 0.0f;
 float zTranslation = 0.0f;
+float xRotation = 0.0f;
+float yRotation = 0.0f;
+float zRotation = 0.0f;
 
 /*----------------------------------------------------------------------------
 MESH TO LOAD
@@ -272,6 +275,9 @@ void display() {
 	mat4 model = identity_mat4();
 	//model = rotate_z_deg(model, rotate_y);
 	view = look_at(vec3(0.0f, 0.0f, 5.0f), vec3(10.0f, 0.0f, 5.0f), vec3(0.0f, 0.0f, 1.0f));
+	view = rotate_x_deg(view, xRotation);
+	view = rotate_y_deg(view, yRotation);
+	view = rotate_z_deg(view, zRotation);
 	view = translate(view, vec3(xTranslation, yTranslation, zTranslation));
 
 	// update uniforms & draw
@@ -319,27 +325,51 @@ void keypress(unsigned char key, int x, int y) {
 		xTranslation = 0.0f;
 		yTranslation = 0.0f;
 		zTranslation = 0.0f;
+		xRotation = 0.0f;
+		yRotation = 0.0f;
+		zRotation = 0.0f;
 		break;
 		//----------- POSITIVE TRANSLATION -----------//
-	case 'd':
+	case 'a':
 		xTranslation += 0.2f;
 		break;
-	case 'z':
+	case 'w':
 		yTranslation += 0.2f;
 		break;
-	case 'r':
+	case 'z':
 		zTranslation += 0.2f;
 		break;
 		//----------- NEGATIVE TRANSLATION -----------//
-	case 'q':
+	case 'e':
 		xTranslation -= 0.2f;
 		break;
-	case 's':
+	case 'x':
 		yTranslation -= 0.2f;
 		break;
-	case 'f':
+	case 's':
 		zTranslation -= 0.2f;
 		break;
+		//----------- POSITIVE ROTATION -----------//
+	case '1':
+		xRotation += 0.6f;
+		break;
+	case 'd':
+		yRotation += 0.6f;
+		break;
+	case '2':
+		zRotation += 0.6f;
+		break;
+		//----------- NEGATIVE ROTATION -----------//
+	case '3':
+		xRotation -= 0.6f;
+		break;
+	case 'q':
+		yRotation -= 0.6f;
+		break;
+	case '4':
+		zRotation -= 0.6f;
+		break;
+		
 	}
 }
 
