@@ -29,6 +29,7 @@ MESH TO LOAD
 // this mesh is a dae file format but you should be able to use any other format too, obj is typically what is used
 // put the mesh in your project directory, or provide a filepath for it here
 #define MESH_NAME "cartoon.3ds"
+#define MESH_NAME_2 "monkeyhead.dae"
 /*----------------------------------------------------------------------------
 ----------------------------------------------------------------------------*/
 
@@ -75,7 +76,6 @@ bool load_mesh(const char* file_name) {
 		const aiMesh* mesh = scene->mMeshes[m_i];
 		printf("    %i vertices in mesh\n", mesh->mNumVertices);
 		g_point_count += mesh->mNumVertices;
-		gl_point.push_back(mesh->mNumVertices);
 		for (unsigned int v_i = 0; v_i < mesh->mNumVertices; v_i++) {
 			if (mesh->HasPositions()) {
 				const aiVector3D* vp = &(mesh->mVertices[v_i]);
@@ -102,7 +102,7 @@ bool load_mesh(const char* file_name) {
 			}
 		}
 	}
-
+	gl_point.push_back(g_point_count);
 	aiReleaseImport(scene);
 	return true;
 }
@@ -213,7 +213,7 @@ void generateObjectBufferMesh() {
 	//Note: you may get an error "vector subscript out of range" if you are using this code for a mesh that doesnt have positions and normals
 	//Might be an idea to do a check for that before generating and binding the buffer.
 
-	load_mesh("monkeyhead.dae");
+	load_mesh(MESH_NAME_2);
 	load_mesh(MESH_NAME);
 	unsigned int vp_vbo = 0;
 	loc1 = glGetAttribLocation(shaderProgramID, "vertex_position");
@@ -289,16 +289,18 @@ void display() {
 	glUniformMatrix4fv(view_mat_location, 1, GL_FALSE, view.m);
 	glUniformMatrix4fv(matrix_location, 1, GL_FALSE, model.m);
 
-	glDrawArrays(GL_TRIANGLES, gl_point[0], g_point_count);
+	glDrawArrays(GL_TRIANGLES, gl_point[0], gl_point[1] + 1);
 
 
 
-	// child of hierarchy 2
+	//second object
 	mat4 model2 = identity_mat4();
-	model2 = rotate_x_deg(model2, 180);
+	//model2 = scale(model2, vec3(0.2f, 0.2f, 0.2f));
+	model2 = rotate_x_deg(model2, -90);
 	model2 = rotate_y_deg(model2, 180);
+	model2 = rotate_z_deg(model2, 90);
 	// translation is 15 units in the y direction from the parents coordinate system
-	model2 = translate(model2, vec3(29.0, 9.0, 0.0));
+	model2 = translate(model2, vec3(30.0, 9.0, 5.0));
 	// global of the child is got by pre-multiplying the local of the child by the global of the parent
 	// update uniform & draw
 	glUniformMatrix4fv(matrix_location, 1, GL_FALSE, model2.m);
