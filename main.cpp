@@ -274,11 +274,12 @@ void display() {
 	mat4 persp_proj = perspective(45.0, (float)width / (float)height, 0.1, 100.0);
 	mat4 model = identity_mat4();
 	//model = rotate_z_deg(model, rotate_y);
-	view = look_at(vec3(0.0f, 0.0f, 5.0f), vec3(10.0f, 0.0f, 5.0f), vec3(0.0f, 0.0f, 1.0f));
+	view = look_at(vec3(0.0f, 0.0f, 5.0f), vec3(20000.0f, 0.0f, 5.0f), vec3(0.0f, 0.0f, 1.0f));
+	view = translate(view, vec3(xTranslation, yTranslation, zTranslation));
 	view = rotate_x_deg(view, xRotation);
 	view = rotate_y_deg(view, yRotation);
 	view = rotate_z_deg(view, zRotation);
-	view = translate(view, vec3(xTranslation, yTranslation, zTranslation));
+
 
 	// update uniforms & draw
 	glUniformMatrix4fv(proj_mat_location, 1, GL_FALSE, persp_proj.m);
@@ -329,25 +330,14 @@ void keypress(unsigned char key, int x, int y) {
 		yRotation = 0.0f;
 		zRotation = 0.0f;
 		break;
-		//----------- POSITIVE TRANSLATION -----------//
-	case 'a':
-		xTranslation += 0.2f;
-		break;
-	case 'w':
-		yTranslation += 0.2f;
-		break;
+		//----------- TRANSLATION -----------//
 	case 'z':
-		zTranslation += 0.2f;
-		break;
-		//----------- NEGATIVE TRANSLATION -----------//
-	case 'e':
-		xTranslation -= 0.2f;
-		break;
-	case 'x':
-		yTranslation -= 0.2f;
+		xTranslation -= 0.2f * sin(yRotation * 3.14f / 180);
+		zTranslation += 0.2f * cos(yRotation * 3.14f / 180);
 		break;
 	case 's':
-		zTranslation -= 0.2f;
+		xTranslation += 0.2f * sin(yRotation * 3.14f / 180);
+		zTranslation -= 0.2f * cos(yRotation * 3.14f / 180);
 		break;
 		//----------- POSITIVE ROTATION -----------//
 	case '1':
