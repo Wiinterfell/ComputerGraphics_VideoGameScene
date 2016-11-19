@@ -29,7 +29,7 @@ MESH TO LOAD
 // this mesh is a dae file format but you should be able to use any other format too, obj is typically what is used
 // put the mesh in your project directory, or provide a filepath for it here
 #define MESH_NAME "cartoon.3ds"
-#define MESH_NAME_2 "monkeyhead.dae"
+#define MESH_NAME_2 "deer-3ds.3ds"
 /*----------------------------------------------------------------------------
 ----------------------------------------------------------------------------*/
 
@@ -295,15 +295,20 @@ void display() {
 
 	//second object
 	mat4 model2 = identity_mat4();
-	//model2 = scale(model2, vec3(0.2f, 0.2f, 0.2f));
-	model2 = rotate_x_deg(model2, -90);
-	model2 = rotate_y_deg(model2, 180);
-	model2 = rotate_z_deg(model2, 90);
-	// translation is 15 units in the y direction from the parents coordinate system
-	model2 = translate(model2, vec3(30.0, 9.0, 5.0));
+	model2 = translate(model2, vec3(100.0, 9.0, 15.0));
+	model2 = scale(model2, vec3(0.15f, 0.15f, 0.15f));
 	// global of the child is got by pre-multiplying the local of the child by the global of the parent
 	// update uniform & draw
 	glUniformMatrix4fv(matrix_location, 1, GL_FALSE, model2.m);
+	glDrawArrays(GL_TRIANGLES, 0, gl_point[0]);
+
+	//second object
+	mat4 model3 = identity_mat4();
+	model3 = translate(model3, vec3(100.0, 20.0, 15.0));
+	model3 = scale(model3, vec3(0.15f, 0.15f, 0.15f));
+	// global of the child is got by pre-multiplying the local of the child by the global of the parent
+	// update uniform & draw
+	glUniformMatrix4fv(matrix_location, 1, GL_FALSE, model3.m);
 	glDrawArrays(GL_TRIANGLES, 0, gl_point[0]);
 
 	glutSwapBuffers();
