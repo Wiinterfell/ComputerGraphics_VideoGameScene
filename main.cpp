@@ -30,12 +30,13 @@ MESH TO LOAD
 // put the mesh in your project directory, or provide a filepath for it here
 #define MESH_NAME "cartoon.3ds"
 #define MESH_NAME_2 "deer-3ds.3ds"
+#define MESH_NAME_3 "monkeyhead.dae"
 /*----------------------------------------------------------------------------
 ----------------------------------------------------------------------------*/
 
 std::vector<float> g_vp, g_vn, g_vt;
 int g_point_count = 0;
-std::vector<int> gl_point;
+std::vector<int> g_point_counts;
 
 
 // Macro for indexing vertex buffer
@@ -102,7 +103,7 @@ bool load_mesh(const char* file_name) {
 			}
 		}
 	}
-	gl_point.push_back(g_point_count);
+	g_point_counts.push_back(g_point_count);
 	aiReleaseImport(scene);
 	return true;
 }
@@ -214,6 +215,7 @@ void generateObjectBufferMesh() {
 	//Might be an idea to do a check for that before generating and binding the buffer.
 
 	load_mesh(MESH_NAME_2);
+	load_mesh(MESH_NAME_3);
 	load_mesh(MESH_NAME);
 	unsigned int vp_vbo = 0;
 	loc1 = glGetAttribLocation(shaderProgramID, "vertex_position");
@@ -289,27 +291,40 @@ void display() {
 	glUniformMatrix4fv(view_mat_location, 1, GL_FALSE, view.m);
 	glUniformMatrix4fv(matrix_location, 1, GL_FALSE, model.m);
 
-	glDrawArrays(GL_TRIANGLES, gl_point[0], gl_point[1] + 1);
+	glDrawArrays(GL_TRIANGLES, g_point_counts[0] + g_point_counts[1], g_point_counts[2]);
 
 
 
 	//second object
 	mat4 model2 = identity_mat4();
+	model2 = rotate_z_deg(model2, rotate_y / 100.0f);
 	model2 = translate(model2, vec3(100.0, 9.0, 15.0));
 	model2 = scale(model2, vec3(0.15f, 0.15f, 0.15f));
-	// global of the child is got by pre-multiplying the local of the child by the global of the parent
-	// update uniform & draw
-	glUniformMatrix4fv(matrix_location, 1, GL_FALSE, model2.m);
-	glDrawArrays(GL_TRIANGLES, 0, gl_point[0]);
 
-	//second object
-	mat4 model3 = identity_mat4();
-	model3 = translate(model3, vec3(100.0, 20.0, 15.0));
-	model3 = scale(model3, vec3(0.15f, 0.15f, 0.15f));
+	glUniformMatrix4fv(matrix_location, 1, GL_FALSE, model2.m);
+	glDrawArrays(GL_TRIANGLES, 0, g_point_counts[0]);
+
+	//third object
+	mat4 model3 = model2;
+	model3 = translate(model3, vec3(0.0, 6.0, 0.0));
+	glUniformMatrix4fv(matrix_location, 1, GL_FALSE, model3.m);
+	glDrawArrays(GL_TRIANGLES, 0, g_point_counts[0]);
+
+
+	//fourth object
+	mat4 model4 = identity_mat4();
+	model4 = translate(model4, vec3(100.0, 20.0, 15.0));
+	model4 = scale(model4, vec3(0.15f, 0.15f, 0.15f));
+	glUniformMatrix4fv(matrix_location, 1, GL_FALSE, model4.m);
+	glDrawArrays(GL_TRIANGLES, 0, g_point_counts[0]);
+
+	//fourth object
+	mat4 model5 = identity_mat4();
+	model5 = translate(model5, vec3(15.0, 9.0, 15.0));
 	// global of the child is got by pre-multiplying the local of the child by the global of the parent
 	// update uniform & draw
-	glUniformMatrix4fv(matrix_location, 1, GL_FALSE, model3.m);
-	glDrawArrays(GL_TRIANGLES, 0, gl_point[0]);
+	glUniformMatrix4fv(matrix_location, 1, GL_FALSE, model5.m);
+	glDrawArrays(GL_TRIANGLES, g_point_counts[0], g_point_counts[1]);
 
 	glutSwapBuffers();
 }
