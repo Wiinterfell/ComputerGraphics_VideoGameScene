@@ -16,6 +16,8 @@
 #include <vector> // STL dynamic memory.
 
 
+mat4 localRoot = identity_mat4();
+
 /*----------------------------------------------------------------------------
 MESH TO LOAD
 ----------------------------------------------------------------------------*/
@@ -266,8 +268,9 @@ void display() {
 	mat4 view = identity_mat4();
 	mat4 persp_proj = perspective(45.0, (float)width / (float)height, 0.1, 100.0);
 	mat4 model = identity_mat4();
-	model = rotate_z_deg(model, rotate_y);
-	view = view = look_at(vec3(20.0f, 20.0f, 20.0f), vec3(0.0f, 0.0f, 0.0f), vec3(-20.0f, -20.0f, 20.0f));
+	//model = rotate_z_deg(model, rotate_y);
+	view = look_at(vec3(20.0f, 20.0f, 20.0f), vec3(0.0f, 0.0f, 0.0f), vec3(-20.0f, -20.0f, 20.0f));
+	view = translate(localRoot, vec3(0.0, 0.0, -60.0f));
 
 	// update uniforms & draw
 	glUniformMatrix4fv(proj_mat_location, 1, GL_FALSE, persp_proj.m);
@@ -308,11 +311,32 @@ void init()
 
 // Placeholder code for the keypress
 void keypress(unsigned char key, int x, int y) {
-
-	if (key == 'x') {
-		//Translate the base, etc.
+	switch (key) {
+		//----------- REINITIALISATION -----------//
+	case ' ':
+		localRoot = identity_mat4();
+		break;
+		//----------- POSITIVE TRANSLATION -----------//
+	case 'd':
+		localRoot = translate(localRoot, vec3(0.2f, 0.0f, 0.0f));
+		break;
+	case 'z':
+		localRoot = translate(localRoot, vec3(0.0f, 0.2f, 0.0f));
+		break;
+	case 'r':
+		localRoot = translate(localRoot, vec3(0.0f, 0.0f, 0.2f));
+		break;
+		//----------- NEGATIVE TRANSLATION -----------//
+	case 'q':
+		localRoot = translate(localRoot, vec3(-0.2f, 0.0f, 0.0f));
+		break;
+	case 's':
+		localRoot = translate(localRoot, vec3(0.0f, -0.2f, 0.0f));
+		break;
+	case 'f':
+		localRoot = translate(localRoot, vec3(0.0f, 0.0f, -0.2f));
+		break;
 	}
-
 }
 
 int main(int argc, char** argv) {
